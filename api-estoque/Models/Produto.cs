@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace api_estoque.Models
 {
@@ -17,6 +18,7 @@ namespace api_estoque.Models
         public abstract string Tipo();
 
         [NotMapped]
+        [JsonIgnore]
         public EstoqueProduto EstoqueProduto { get; set; }
 
 

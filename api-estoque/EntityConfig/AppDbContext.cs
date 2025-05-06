@@ -72,6 +72,11 @@ namespace api_estoque.EntityConfig
                 .WithMany()
                 .HasForeignKey(p => p.CategoriaId);
 
+            modelBuilder.Entity<Produto>()
+                .HasOne(e => e.EstoqueProduto)
+                .WithMany();
+           
+
         }
     }
 }

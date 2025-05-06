@@ -88,7 +88,7 @@ namespace api_estoque.Padroes.Facade
 
                 var movimentacao = new MovimentacaoContext();
                 movimentacao.SetStrategy(new MovimentacaoEntradaStrategy(_context));
-                movimentacao.SalvarMovimentacao(estoqueProduto.Id, entrada.Quantidade);
+                movimentacao.SalvarMovimentacao(estoqueProduto.Id, entrada.Quantidade); 
 
                 return new ProdutoDTO
                 {
@@ -119,6 +119,11 @@ namespace api_estoque.Padroes.Facade
 
                     EstoqueProduto estprodAtt = _estoqueProdutoRepository.Saida(saida.Id, saida.Quantidade);
                     bool val = _validadeRepository.Saida(estoqProd.Id, saida.Quantidade);
+
+
+                    var movimentacao = new MovimentacaoContext();
+                    movimentacao.SetStrategy(new MovimentacaoSaidaStrategy(_context));
+                    movimentacao.SalvarMovimentacao(saida.Id, saida.Quantidade);
 
                     return val;                
                 }
