@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace api_estoque.Models
 {
@@ -14,6 +15,7 @@ namespace api_estoque.Models
         public double Preco { get; set; }
 
         [NotMapped]
-        public List<Validade>? Validades { get; set; } = new List<Validade>();
+        [JsonIgnore]
+        public List<Validade>? Validades { get; set; }
     }
 }

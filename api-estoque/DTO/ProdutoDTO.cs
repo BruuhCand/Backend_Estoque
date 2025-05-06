@@ -13,6 +13,6 @@ namespace api_estoque.DTO
         public int CategoriaId { get; set; }
         public Categoria? Categoria { get; set; }
         public int TipoProduto { get; set; }
-        public List<Validade>? Validades { get; set; } = new();
+        public List<Validade>? Validades { get; set; }
     }
 }

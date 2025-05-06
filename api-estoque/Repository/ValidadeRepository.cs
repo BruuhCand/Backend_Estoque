@@ -71,7 +71,7 @@ namespace api_estoque.Repository
         }
 
 
-        public Validade Save(int estoqueProId, DateTime data, int quantidade)
+        public Validade Save(int estoqueProId, DateTime? data, int quantidade)
         {
             try
             {

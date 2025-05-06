@@ -3,6 +3,7 @@ using api_estoque.EntityConfig;
 using api_estoque.Interface;
 using api_estoque.Models;
 using api_estoque.Padroes.Singleton;
+using Microsoft.EntityFrameworkCore;
 
 namespace api_estoque.Repository
 {
@@ -35,13 +36,19 @@ namespace api_estoque.Repository
 
         public EstoqueDTO GetEstoque()
         {
-            List<EstoqueProduto> produtos = _context.EstoqueProdutos.Where(p => p.EstoqueId == EstoqueSingleton.Instance.Estoque.Id).ToList();
+            List<EstoqueProduto> produtos = _context.EstoqueProdutos
+            .Include(ep => ep.Produto)
+            .Include(v => v.Validades)
+            .Where(ep => ep.EstoqueId == EstoqueSingleton.Instance.Estoque.Id)
+            .ToList();
+
 
             if (produtos != null)
             {
                 List<ProdutoDTO> produtosDTO = new List<ProdutoDTO>();
                 foreach (var produto in produtos)
                 {
+                    
                     var produt = new ProdutoDTO
                     {
                         Id = produto.Id,
@@ -51,7 +58,7 @@ namespace api_estoque.Repository
                         Preco = produto.Preco,
                         CategoriaId = produto.Produto.CategoriaId,
                         TipoProduto = produto.Produto.TipoProduto,
-                        Validades = produto.Validades
+                        Validades = produto.Validades != null ? produto.Validades : null
                     };
                     produtosDTO.Add(produt);
                 }
