@@ -64,9 +64,6 @@ namespace api_estoque.Migrations
                     b.Property<int>("ProdutoId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("ProdutoId1")
-                        .HasColumnType("INTEGER");
-
                     b.Property<int>("Quantidade")
                         .HasColumnType("INTEGER");
 
@@ -74,9 +71,7 @@ namespace api_estoque.Migrations
 
                     b.HasIndex("EstoqueId");
 
-                    b.HasIndex("ProdutoId");
-
-                    b.HasIndex("ProdutoId1")
+                    b.HasIndex("ProdutoId")
                         .IsUnique();
 
                     b.ToTable("EstoqueProdutos");
@@ -219,14 +214,10 @@ namespace api_estoque.Migrations
                         .IsRequired();
 
                     b.HasOne("api_estoque.Models.Produto", "Produto")
-                        .WithMany()
-                        .HasForeignKey("ProdutoId")
+                        .WithOne("EstoqueProduto")
+                        .HasForeignKey("api_estoque.Models.EstoqueProduto", "ProdutoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("api_estoque.Models.Produto", null)
-                        .WithOne("EstoqueProduto")
-                        .HasForeignKey("api_estoque.Models.EstoqueProduto", "ProdutoId1");
 
                     b.Navigation("Estoque");
 
@@ -265,11 +256,13 @@ namespace api_estoque.Migrations
 
             modelBuilder.Entity("api_estoque.Models.Validade", b =>
                 {
-                    b.HasOne("api_estoque.Models.EstoqueProduto", null)
+                    b.HasOne("api_estoque.Models.EstoqueProduto", "EstoqueProduto")
                         .WithMany("Validades")
                         .HasForeignKey("EstoqueProdutoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("EstoqueProduto");
                 });
 
             modelBuilder.Entity("api_estoque.Models.Estoque", b =>

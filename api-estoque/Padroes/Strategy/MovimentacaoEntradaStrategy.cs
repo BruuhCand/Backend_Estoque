@@ -22,7 +22,8 @@ namespace api_estoque.Padroes.Strategy
                     UserId = UserSingleton.Instance.Usuario.Id,
                     Tipo = "E",
                     EstoqueProdutoId = estoqueProdutoId,
-                    Quantidade = quantidade
+                    Quantidade = quantidade,
+                    Data = DateTime.Now
                 };
 
                 _context.Movimentacao.Add(movimentacao);

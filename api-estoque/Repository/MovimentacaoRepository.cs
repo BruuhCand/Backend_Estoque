@@ -78,7 +78,8 @@ namespace api_estoque.Repository
                     UserId = UserSingleton.Instance.Usuario.Id,
                     Tipo = "S",
                     EstoqueProdutoId = estoqueProdutoId,
-                    Quantidade = quantidade
+                    Quantidade = quantidade,
+                    Data = DateTime.Now
 
                 };
 
