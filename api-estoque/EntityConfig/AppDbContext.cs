@@ -35,10 +35,9 @@ namespace api_estoque.EntityConfig
             .HasValue<ProdutoBasic>(0)
             .HasValue<ProdutoPerecivel>(1);
 
-            modelBuilder.Entity<EstoqueProduto>()
-           .HasMany(ep => ep.Validades)
-           .WithOne() 
-           //.HasForeignKey("EstoqueProdutoId")
+            modelBuilder.Entity<Validade>()
+           .HasOne(ep => ep.EstoqueProduto)
+           .WithMany(v => v.Validades) 
            .OnDelete(DeleteBehavior.Cascade); 
 
             modelBuilder.Entity<EstoqueProduto>()
@@ -72,10 +71,10 @@ namespace api_estoque.EntityConfig
                 .WithMany()
                 .HasForeignKey(p => p.CategoriaId);
 
-            modelBuilder.Entity<Produto>()
-                .HasOne(e => e.EstoqueProduto)
-                .WithMany();
-           
+            modelBuilder.Entity<EstoqueProduto>()
+            .HasOne(p => p.Produto)
+            .WithOne(ep => ep.EstoqueProduto);
+
 
         }
     }

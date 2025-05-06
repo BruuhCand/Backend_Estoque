@@ -154,10 +154,6 @@ namespace api_estoque.Repository
 
         public List<ProdutoDTO> GetAllProduto()
         {
-            List<Produto> prod = _context.Produto
-            .Include(p => p.Categoria)
-            .Include(p => p.EstoqueProduto)
-            .ThenInclude(e => e.Validades).ToList();
 
             return _context.Produto
             .Include(p => p.Categoria)
