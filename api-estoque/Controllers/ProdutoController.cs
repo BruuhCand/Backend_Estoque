@@ -68,8 +68,8 @@ namespace api_estoque.Controllers
         {
             try
             {
-                _produtoFacade.SaidaProduto(produto);
-                return Ok("Saída realizada com sucesso.");
+                
+                return Ok(_produtoFacade.SaidaProduto(produto));
             }
             catch (Exception ex)
             {
@@ -82,8 +82,8 @@ namespace api_estoque.Controllers
         {
             try
             {
-                _produtoFacade.Edit(produto);
-                return Ok("Produto editado com sucesso.");
+                
+                return Ok(_produtoFacade.Edit(produto));
             }
             catch (Exception ex)
             {
@@ -97,7 +97,7 @@ namespace api_estoque.Controllers
             try
             {
                 _produtoRepository.DeleteProduto(id);
-                return Ok("Produto deletado com sucesso.");
+                return Ok();
             }
             catch (Exception ex)
             {
