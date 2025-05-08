@@ -3,6 +3,8 @@ using api_estoque.EntityConfig;
 using api_estoque.Interface;
 using api_estoque.Models;
 using api_estoque.Padroes.Factory;
+using api_estoque.Padroes.Memento;
+using api_estoque.Padroes.Prototype;
 using api_estoque.Padroes.Singleton;
 using api_estoque.Padroes.Strategy;
 using Microsoft.EntityFrameworkCore;
@@ -16,28 +18,35 @@ namespace api_estoque.Padroes.Facade
             private readonly IEstoqueProdutoRepository _estoqueProdutoRepository;
             private readonly IValidadeRepository _validadeRepository;
             private readonly ICategoriaRepository _categoriaRepository;
+            private readonly IProdutoMementoRepository _produtoMementoRepository;
             private AppDbContext _context;
-        public ProdutoFacade( AppDbContext context, IProdutoRepository produto, IEstoqueProdutoRepository estoque, IValidadeRepository validade) {
+        public ProdutoFacade( AppDbContext context, IProdutoRepository produto, IEstoqueProdutoRepository estoque, IValidadeRepository validade, IProdutoMementoRepository produtoMemento) {
             _context = context;
             _produtoRepository = produto;
             _estoqueProdutoRepository = estoque;
             _validadeRepository = validade;
+            _produtoMementoRepository = produtoMemento;
         }
+
         public void Edit(ProdutoEditDTO produto)
         {
             try
             {
 
-                Produto editProd = _context.Produto.FirstOrDefault(p => p.Id == produto.Id);
+                Produto produtoBanco = _context.Produto.AsNoTracking().Include(e => e.EstoqueProduto).FirstOrDefault(p => p.Id == produto.Id);
 
+                var prototipo = new ProdutoPrototype(produtoBanco);
+                var editProd = prototipo.Clonar();
 
                 editProd.Id = produto.Id;
                 editProd.Descricao = produto.Descricao;
                 editProd.CategoriaId = produto.CategoriaId;
                 editProd.Nome = produto.Nome;
 
-                Produto produtoBanco = _produtoRepository.EditProduto(editProd);
-                EstoqueProduto estoqueprod = _estoqueProdutoRepository.Edit(produtoBanco.Id, produto.Preco);
+                Produto produtoAtt = _produtoRepository.EditProduto(editProd);
+                EstoqueProduto estoqueprod = _estoqueProdutoRepository.Edit(produtoAtt.Id, produto.Preco);
+
+                _produtoMementoRepository.SaveMemento(produtoBanco);
 
 
             }
@@ -46,6 +55,8 @@ namespace api_estoque.Padroes.Facade
             }
 
         }
+
+        
 
         public ProdutoDTO EntradaProduto(EntradaDTO entrada)
         {
@@ -117,6 +128,50 @@ namespace api_estoque.Padroes.Facade
             catch (Exception e) 
             {
                 throw new Exception("Quantidade de Saida maior que quantidade no estoque", e);
+            }
+        }
+
+        public Produto SetLastVersion(int ProdutoId)
+        {
+            try
+            {
+                ProdutoMemento lastVersion = _produtoMementoRepository.GetLastMemento(ProdutoId);
+
+                if (lastVersion != null) {
+                    Produto produto = alterTypeProduto(lastVersion);
+                    Produto produtoAtt = _produtoRepository.EditProduto(produto);
+                    EstoqueProduto estoqueprod = _estoqueProdutoRepository.Edit(produtoAtt.Id, lastVersion.Preco);
+
+                    return produtoAtt;
+                }
+                else
+                {
+                    throw new ("Produto em sua ultima versão");
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Erro ao atualizar ultima versão do produto", e);
+            }
+        }
+
+        private Produto alterTypeProduto(ProdutoMemento produtoMemento)
+        {
+            try
+            {
+                Produto prod = produtoMemento.TipoProduto == 1 ? ProdutoFactory.CriarProduto("perecivel") : ProdutoFactory.CriarProduto("basic");
+
+                prod.Id = produtoMemento.ProdutoId;
+                prod.TipoProduto = produtoMemento.TipoProduto;
+                prod.Nome = produtoMemento.Nome;
+                prod.Descricao = produtoMemento.Descricao;
+                prod.CategoriaId = produtoMemento.CategoriaId;
+
+                return prod;
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Erro ao alterar tipo do produto", e);
             }
         }
     }

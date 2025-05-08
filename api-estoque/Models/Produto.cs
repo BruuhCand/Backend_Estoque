@@ -10,7 +10,7 @@ namespace api_estoque.Models
         public string Descricao { get; set; }
 
         public int CategoriaId { get; set; }
-        public Categoria Categoria { get; set; }
+        public Categoria? Categoria { get; set; }
 
         public int TipoProduto { get; set; }
 

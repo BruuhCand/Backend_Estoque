@@ -1,4 +1,5 @@
 ﻿using api_estoque.Interface;
+using api_estoque.Padroes.Memento;
 using api_estoque.Repository;
 
 
@@ -23,6 +24,7 @@ namespace api_estoque.EntityConfig
         public IValidadeRepository ValidadeRepository() => new ValidadeRepository(_context);
         public IProdutoRepository ProdutoRepository() => new ProdutoRepository(_context, MovimentacaoRepository(), ValidadeRepository());
         public IEstoqueProdutoRepository EstoqueProdutoRepository() => new EstoqueProdutoRepository(_context);
+        public IProdutoMementoRepository ProdutoMementoRepository() => new ProdutoMementoRepository(_context);
 
     }
 }

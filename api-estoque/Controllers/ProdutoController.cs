@@ -104,5 +104,19 @@ namespace api_estoque.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpPut("lastVersion/{id}")]
+        public IActionResult EditarProduto(int id)
+        {
+            try
+            {
+               
+                return Ok(_produtoFacade.SetLastVersion(id));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }

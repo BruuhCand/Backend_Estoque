@@ -1,4 +1,5 @@
 ﻿using api_estoque.Interface;
+using api_estoque.Padroes.Memento;
 
 namespace api_estoque.EntityConfig
 {
@@ -11,5 +12,6 @@ namespace api_estoque.EntityConfig
         IMovimentacaoRepository MovimentacaoRepository();
         IValidadeRepository ValidadeRepository();
         IEstoqueProdutoRepository EstoqueProdutoRepository();
+        IProdutoMementoRepository ProdutoMementoRepository();
     }
 }

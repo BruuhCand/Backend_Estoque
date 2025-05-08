@@ -1,4 +1,5 @@
 ﻿using api_estoque.Models;
+using api_estoque.Padroes.Memento;
 using Microsoft.EntityFrameworkCore;
 
 namespace api_estoque.EntityConfig
@@ -16,6 +17,7 @@ namespace api_estoque.EntityConfig
         public DbSet<Categoria> Categoria { get; set; }
         public DbSet<Validade> Validade { get; set; }
         public DbSet<Movimentacao> Movimentacao { get; set; }
+        public DbSet<ProdutoMemento> ProdutoMemento { get; set; }
 
 
 
@@ -29,6 +31,7 @@ namespace api_estoque.EntityConfig
             modelBuilder.Entity<Validade>().HasKey(ep => ep.Id);
             modelBuilder.Entity<Categoria>().HasKey(ep => ep.Id);
             modelBuilder.Entity<Movimentacao>().HasKey(ep => ep.Id);
+            modelBuilder.Entity<ProdutoMemento>().HasKey(ep => ep.MementoId);
 
             modelBuilder.Entity<Produto>()
             .HasDiscriminator<int>("TipoProduto")

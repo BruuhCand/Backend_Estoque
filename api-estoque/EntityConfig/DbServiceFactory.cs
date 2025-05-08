@@ -13,7 +13,7 @@ namespace api_estoque.EntityConfig
 
         public IProdutoFacade ProdutoFacade()
         {
-            return _produtoFacade ??= new ProdutoFacade( _context, ProdutoRepository(), EstoqueProdutoRepository(), ValidadeRepository());
+            return _produtoFacade ??= new ProdutoFacade( _context, ProdutoRepository(), EstoqueProdutoRepository(), ValidadeRepository(), ProdutoMementoRepository());
         }
 
     }
