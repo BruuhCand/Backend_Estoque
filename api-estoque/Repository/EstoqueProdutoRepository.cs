@@ -14,7 +14,7 @@ namespace api_estoque.Repository
             _context = context;
         }
 
-        public EstoqueProduto Edit(int? IdProduto, int quantidade, double preco)
+        public EstoqueProduto Edit(int? IdProduto, double preco)
         {
             try
             {
@@ -22,7 +22,6 @@ namespace api_estoque.Repository
 
                 if (estprod != null)
                 {
-                    estprod.Quantidade = quantidade;
                     estprod.Preco = preco;
 
                     _context.Entry(estprod).State = Microsoft.EntityFrameworkCore.EntityState.Modified;

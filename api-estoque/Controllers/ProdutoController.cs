@@ -78,12 +78,12 @@ namespace api_estoque.Controllers
         }
 
         [HttpPut]
-        public IActionResult EditarProduto([FromBody] ProdutoDTO produto)
+        public IActionResult EditarProduto([FromBody] ProdutoEditDTO produto)
         {
             try
             {
-                
-                return Ok(_produtoFacade.Edit(produto));
+                _produtoFacade.Edit(produto);
+                return Ok();
             }
             catch (Exception ex)
             {

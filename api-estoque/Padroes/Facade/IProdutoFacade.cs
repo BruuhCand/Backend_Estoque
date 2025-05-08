@@ -6,6 +6,6 @@ namespace api_estoque.Padroes.Facade
     {
         ProdutoDTO EntradaProduto(EntradaDTO entrada);
         bool SaidaProduto(SaidaDTO saida);
-        ProdutoDTO Edit(ProdutoDTO produto);
+        void Edit(ProdutoEditDTO produto);
     }
 }

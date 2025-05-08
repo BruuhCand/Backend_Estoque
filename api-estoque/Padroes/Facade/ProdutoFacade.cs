@@ -23,38 +23,23 @@ namespace api_estoque.Padroes.Facade
             _estoqueProdutoRepository = estoque;
             _validadeRepository = validade;
         }
-        public ProdutoDTO Edit(ProdutoDTO produto)
+        public void Edit(ProdutoEditDTO produto)
         {
             try
             {
-                Produto editProd = produto.TipoProduto == 1 ? ProdutoFactory.CriarProduto("perecivel") : ProdutoFactory.CriarProduto("basic");
+
+                Produto editProd = _context.Produto.FirstOrDefault(p => p.Id == produto.Id);
+
 
                 editProd.Id = produto.Id;
                 editProd.Descricao = produto.Descricao;
-                editProd.TipoProduto = produto.TipoProduto;
                 editProd.CategoriaId = produto.CategoriaId;
                 editProd.Nome = produto.Nome;
 
                 Produto produtoBanco = _produtoRepository.EditProduto(editProd);
-                EstoqueProduto estoqueprod = _estoqueProdutoRepository.Edit(produtoBanco.Id, produto.QuantTotal, produto.Preco);
+                EstoqueProduto estoqueprod = _estoqueProdutoRepository.Edit(produtoBanco.Id, produto.Preco);
 
-                List<Validade> validades = null;
-                if(produto.TipoProduto == 1)
-                {
-                    validades = _validadeRepository.Editar(estoqueprod.Id, produto.Validades);
-                }
 
-                return new ProdutoDTO
-                {
-                    Id = editProd.Id,
-                    Nome = editProd.Nome,
-                    Descricao = editProd.Descricao,
-                    CategoriaId = editProd.CategoriaId,
-                    Preco = estoqueprod.Preco,
-                    QuantTotal = estoqueprod.Quantidade,
-                    TipoProduto = editProd.TipoProduto,
-                    Validades = validades
-                };
             }
             catch (Exception ex) {
                 throw ex;
